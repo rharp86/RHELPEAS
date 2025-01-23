@@ -3,7 +3,7 @@ RHELpeas.sh - Privilege Escalation Enumeration Script for RHEL
 
 Created by: Robert Harp
 
-RHELpeas.sh is a lightweight, yet powerful enumeration script tailored specifically for Red Hat Enterprise Linux (RHEL) systems. Modeled after the popular linpeas.sh, this script focuses exclusively on RHEL distributions and provides an extensive assessment of privilege escalation vectors. Additionally, it checks for containerized, cloud, and Kubernetes environments, as well as any installed databases.
+rhelpeas.sh is a lightweight, yet powerful enumeration script tailored specifically for Red Hat Enterprise Linux (RHEL) systems. Modeled after the popular linpeas.sh, this script focuses exclusively on RHEL distributions and provides an extensive assessment of privilege escalation vectors. Additionally, it checks for containerized, cloud, and Kubernetes environments, as well as any installed databases. rhelpeas.sh was created to run on RHEL systems the are secure and when linpeas.sh is restricted from running on those RHEL systems. 
 
 Features
 	•	Privilege Escalation Vectors:
@@ -23,14 +23,10 @@ Features
 
 Installation
 	1.	Clone the repository or download the script:
-
-git clone https://github.com/yourusername/rhelpeas.git
-cd rhelpeas
-
-
+ 	git clone https://github.com/rharp86/rhelpeas.git
+  	cd rhelpeas
 	2.	Make the script executable:
-
-chmod +x rhelpeas.sh
+ 	chmod +x rhelpeas.sh
 
 Usage
 
