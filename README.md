@@ -50,12 +50,14 @@ Verbose Mode:
 Output
 
 The script will generate a detailed enumeration report, highlighting potential privilege escalation vectors, including but not limited to:
+
 	•	Misconfigured permissions.
 	•	Vulnerable binaries.
 	•	Exposed credentials and tokens.
 	•	Docker, Kubernetes, cloud, and database-related risks.
 
 Requirements
+
 	•	RHEL-based system.
 	•	Bash shell.
 
