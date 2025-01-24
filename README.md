@@ -39,13 +39,17 @@ Basic Usage:
 
 ./rhelpeas.sh
 
+Default Output: 
+
+The Script defaults the output to txt by the coding in the script. If you enter the follow: ./rhelpeas.sh | tee rhelpeas_output.html (json or csv), the script will still generate a output text file. 
+
 Save Output to a File:
 
-./rhelpeas.sh > rhelpeas-output.txt
+./rhelpeas.sh | tee rhelpeas_output.html or 
 
-Verbose Mode:
+./rhelpeas.sh | tee rhelpeas_output.json or 
 
-./rhelpeas.sh -v
+./rhelpeas.sh | tee rhelpeas_output.csv
 
 Output
 
