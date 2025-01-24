@@ -1,18 +1,34 @@
 #!/bin/bash
 #Simple Privilege Escalation Enumeration Script for RHEL-based Systems
 
+# Define the log file
+LOG_FILE="rhelpeas_$(date +'%Y%m%d_%H%M%S').txt"
+
+# Redirect all output to both the console and the log file
+exec > >(tee -i "$LOG_FILE") 2>&1
+
 # Define colors for output
 green='\033[0;32m'
 yellow='\033[1;33m'
 red='\033[1;31m'
 blue='\033[1;34m'
-#magenta='\033[1;35m'
+magenta='\033[1;35m'
 cyan='\033[1;36m'
 reset='\033[0m'
-#white='\033[1;37m'
+white='\033[1;37m'
 
-echo -e "${green}========================================================================================"
-echo -e "RHEL Privilege Escalation Enumeration Script"
+echo -e "${blue}========================================================================================"
+echo -e "
+██████╗ ██╗  ██╗███████╗██╗     ██████╗ ███████╗ █████╗ ███████╗
+██╔══██╗██║  ██║██╔════╝██║     ██╔══██╗██╔════╝██╔══██╗██╔════╝
+██████╔╝███████║█████╗  ██║     ██████╔╝█████╗  ███████║███████╗
+██╔══██╗██╔══██║██╔══╝  ██║     ██╔═══╝ ██╔══╝  ██╔══██║╚════██║
+██║  ██║██║  ██║███████╗███████╗██║     ███████╗██║  ██║███████║
+╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝                                                            
+"
+echo -e "${white}Privilege Escalation Enumeration Script${reset}"
+echo -e "${white}Created By: Robert Harp${reset}"
+echo -e "${white}Version: 1.0${reset}"
 echo -e "========================================================================================${reset}"
 
 echo -e "\n${red}Justin is PAB!!!${reset}"
@@ -35,17 +51,7 @@ ${blue}       /\\_/\\
 PEA="${red}●${reset}"
 
 # Display the cat and pea
-echo -e "$CAT        $PEA"
-
-
-# Updated aligned ASCII cat for RHELPEAS script
-#echo -e "${red}      /\\_/\\"
-#echo -e "${green}     ( o.o )"
-#echo -e "${blue}      > ^ <"
-#echo -e "${magenta}     /     \\"
-#echo -e "${cyan}    /       \\"
-#echo -e "${yellow}   /_________\\"
-#echo -e "${white}  (___________)"
+echo -e "$CAT\t$PEA"
 
 #Function to check command existence
 check_command() {
@@ -56,9 +62,10 @@ check_command() {
     return 0
 }
 
-# ===================================================
-# Basic System Information
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Basic System Information"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+] Basic System Information${reset}"
 uname -a
 echo -e "Kernel Version: ${yellow}$(uname -r)${reset}"
@@ -67,15 +74,16 @@ echo -e "Current User: ${yellow}$(whoami)${reset}"
 echo -e "Hostname: ${yellow}$(hostname)${reset}"
 echo "SELinux Status: $(sestatus 2>/dev/null || echo 'SELinux is not installed')"
 
-# ===================================================
-# Check for Sudo Privileges
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Check for Sudo Privileges"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Checking Sudo Privileges${reset}"
 sudo -n -l 2>/dev/null || echo "User does not have sudo privileges or sudo is not installed."
 
-# ===================================================
-# SUID/SGID Files
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "SUID/SGID Files"
+echo -e "==================================================================${reset}"
 #echo -e "\n${green}[+]Checking for SUID/SGID Files${reset}"
 #find / -type f \( -perm -4000 -o -perm -2000 \) -exec ls -la {} \; 2>/dev/null | grep -v "/snap/"
 
@@ -86,15 +94,16 @@ find / -perm -2000 -type f -exec ls -la {} \; 2>/dev/null
 echo -e "\n${green}[+]Checking LD_PRELOAD vulnerabilities${reset}"
 strings /usr/bin/sudo | grep -i "preload"
 
-# ===================================================
-# Writable Directories
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Writable Directories"
+echo -e "==================================================================${reset}"
 echo -e "\n${green}[+]Finding World-Writable Directories (excluding /proc and /sys)....${reset}"
 find / -type d -perm -0002 -exec ls -ld {} \; 2>/dev/null | grep -Ev "^/proc|^/sys"
 
-# ===================================================
-# Cron Jobs
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Cron Jobs"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Checking Cron Jobs${reset}"
 echo "System-wide Cron Jobs:"
 cat /etc/crontab 2>/dev/null
@@ -103,105 +112,133 @@ ls -la /var/spool/cron 2>/dev/null
 echo -e "\nCron jobs in /etc/cron.* directories:"
 ls -la /etc/cron.* 2>/dev/null
 
-# ===================================================
-# Environmental Variables
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Environment Variables"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Checking for Sensitive Data in Environment Variables....${reset}"
 env
 
-# ===================================================
-# Installed Packages and Vulnerabilities
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Installed Packages and Vulnerabilities"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Checking for Installed Packages and Vulnerabilities....${reset}"
 rpm -qa | sort --ignore-leading-blanks
  
-# ===================================================
-# Network Configuration and Connection
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Network Configuration and Connection"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Checking Network Configurations....${reset}"
 ip addr
 echo -e "\nOpen Ports:"
 netstat -tulnp | grep LISTEN
 
 
-# ===================================================
-# Sensitive Files
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Sensitive Files"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Checking for Sensitive Files....${reset}"
 find / -name "id_rsa*" -o -name "*.pem" -o -name "*.key " 2>/dev/null
 echo -e "\nFiles containing passwords:"
 grep -ril "password" /etc /home /root 2>/dev/null
 
-# ===================================================
-# User and Group Enumeration
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "User and Group Enumeration"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Checking User and Group Enumeration....${reset}"
 cat /etc/passwd
 echo -e "\nGroups:"
 cat /etc/group
  
-# ===================================================
-# Processes Running
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Processes Running"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Checking Processes Running....${reset}"
 ps aux
 
-# ===================================================
-# Kernel Exploit Checks
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Kernel Exploit Checks"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Checking for Kernel Vulnerabilities....${reset}"
 echo -e "Kernel Version: ${yellow}$(uname -r)${reset}"
 
-# ===================================================
-# Enumerating File Sharing (NFS, SMB)
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Enumerating File Sharing (NFS, SMB)"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Enumerating File Shares....${reset}"
 echo -e "\n${green}[+]NFS Shares:....${reset}"
-check_command showmount && showmount -e 127.0.0.1 2>/dev/null || echo -e 
-"\n${red}[-] NFS not installed or no share available.${reset}"
+check_command showmount && showmount -e 127.0.0.1 2>/dev/null || echo -e "\n${red}[-] NFS not installed or no share available.${reset}"
 echo -e "\n${green}[+]SMB Shares:....${reset}"
-check_command smbclient && smbclient -L localhost -N 2>/dev/null || echo -e
-"\n${red}[-] SMB not installed or no share available.${reset}"
+check_command smbclient && smbclient -L localhost -N 2>/dev/null || echo -e "\n${red}[-] SMB not installed or no share available.${reset}"
 
-# ===================================================
-# Active Sessions and Logged-In Users
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Active Sessions and Logged-In Users"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Active Sessions and Logged-In Users:${reset}"
 who -a || echo -e "\n${red}[-] Unable to enumerate logged-in users.${reset}"
 echo -e "\nLast Loggins:"
 
-# ===================================================
-# Search for Passwords/Keys in Config Files
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Search for Passwords/Keys in Config Files"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Searching for Passwords/Keys in Config Files:${reset}"
 grep -rli "password" /etc /home /root 2>/dev/null
 grep -rli "key" /etc /home /root 2>/dev/null
 grep -rli "secret" /etc /home /root 2>/dev/null
 
-# ===================================================
-# Checking Services
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Enumerating Services"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Enumerating Services:${reset}"
 echo "System Services (running):"
-systemctl list-units --type=service --state=running || { echo -e "\n${red}[-] Unable to enumerate system services.${reset}"; exit 1; }
-echo -e "\nServices with incorrect file permissions:"
-find /etc/systemd/system /lib/systemd/system /usr/lib/systemd/system -type f -perm /o+w 2>/dev/null
+if services=$(timeout 10s systemctl list-units --type=service --state=running 2>/dev/null); then
+    if [ -n "$services" ]; then
+        echo "$services"
+    else
+        echo -e "\n${red}[-] No running services found.${reset}"
+    fi
+else
+    echo -e "\n${red}[-] Unable to enumerate system services or command timed out.${reset}"
+fi
 
-# ===================================================
-# Searching for Backup Files
-# ===================================================
+echo -e "\nServices with incorrect file permissions:"
+if incorrect_permissions=$(find /etc/systemd/system /lib/systemd/system /usr/lib/systemd/system -type f -perm /o+w 2>/dev/null); then
+    if [ -n "$incorrect_permissions" ]; then
+        echo "$incorrect_permissions"
+    else
+        echo -e "\n${red}[-] No services with incorrect file permissions found.${reset}"
+    fi
+else
+    echo -e "\n${red}[-] Unable to search for services with incorrect file permissions.${reset}"
+fi
+
+echo -e "\n${cyan}=================================================================="
+echo -e "Search for Backup Files"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Searching for Backup Files:${reset}"
 find / -name "*.bak" -o -name "*.old" -o -name "*.backup" -name "*.save" 2>/dev/null
 
-# ===================================================
-# Searching for Writable Configuration Files
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Search for Writable Configuration Files"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Searching for Writable Configuration Files:${reset}"
 find /etc -type f -writable 2>/dev/null
 
-# ===================================================
-# Databases
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Databases"
+echo -e "==================================================================${reset}"
 
 #PostgreSQL
 echo -e "\n${green}[+]Checking for PostgreSQL:${reset}"
@@ -280,9 +317,9 @@ else
     echo -e "\n${red}[-] Neo4j is not installed.${reset}"
 fi
 
-# ===================================================
-# Cloud Environments
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Cloud Environments"
+echo -e "==================================================================${reset}"
 
 #AWS
 echo -e "\n${green}[+]Checking for AWS:${reset}"
@@ -322,9 +359,10 @@ else
     echo -e "\n${red}[-] GCP credentials not found.${reset}"
 fi
 
-# ===================================================
-# Kubernetes
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Kubernetes Environments"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Checking for Kubernetes:${reset}"
 if command -v kubectl &>/dev/null; then
     echo -e "\n${green}[+] Kubernetes detected.${reset}"
@@ -357,9 +395,10 @@ else
     echo -e "\n${red}[-] Kubernetes is not installed or configured.${reset}"
 fi
 
-# ===================================================
-# Docker and Container Information
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Docker and Container Information"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Checking for Docker:${reset}"
 if command -v docker &>/dev/null; then
     echo -e "\n${green}[+] Docker is installed.${reset}"
@@ -379,9 +418,10 @@ else
     echo -e "\n${red}[-] Docker is not installed.${reset}"
 fi
 
-# ===================================================
-# Puppet Configuration and Code Analysis
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Puppet Configuration and Code Analysis"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${green}[+]Checking for Puppet:${reset}"
 if command -v puppet &>/dev/null; then
     echo -e "\n${green}[+] Puppet is installed.${reset}"
@@ -398,10 +438,11 @@ else
     echo -e "\n${red}[-] Puppet is not installed.${reset}"
 fi
 
-# ===================================================
-# Cleaning Up
-# ===================================================
+echo -e "\n${cyan}=================================================================="
+echo -e "Cleaning Up"
+echo -e "==================================================================${reset}"
+
 echo -e "\n${cyan}[+]Cleaning Up:${reset}"
-echo -e "${cyan}========================================================================================"
-echo -e "RHEL Privilege Escalation Completed"
+echo -e "${magenta}========================================================================================"
+echo -e "\nRHEL Privilege Escalation Completed"
 echo -e "========================================================================================${reset}"
