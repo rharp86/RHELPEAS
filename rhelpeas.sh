@@ -29,7 +29,7 @@ echo -e "
 echo -e "${white}Privilege Escalation Enumeration Script${reset}"
 echo -e "${white}Created By: Robert Harp${reset}"
 echo -e "${white}Version: 1.0${reset}"
-echo -e "========================================================================================${reset}"
+echo -e "${blue}========================================================================================${reset}"
 
 echo -e "\n${red}Justin is PAB!!!${reset}"
 
@@ -444,5 +444,5 @@ echo -e "==================================================================${res
 
 echo -e "\n${cyan}[+]Cleaning Up:${reset}"
 echo -e "${magenta}========================================================================================"
-echo -e "\nRHEL Privilege Escalation Completed"
+echo -e "\nRHEL Privilege Escalation Completed!"
 echo -e "========================================================================================${reset}"
