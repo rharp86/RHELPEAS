@@ -1,4 +1,4 @@
-# RhelPEAS-NG
+# RHELPEAS
 
 RHELPEAS - Privilege Escalation Enumeration Script for RHEL
 
