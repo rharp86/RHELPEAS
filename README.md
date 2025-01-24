@@ -1,5 +1,13 @@
 # RhelPEAS-NG
-RHELpeas.sh - Privilege Escalation Enumeration Script for RHEL
+
+██████╗ ██╗  ██╗███████╗██╗     ██████╗ ███████╗ █████╗ ███████╗
+██╔══██╗██║  ██║██╔════╝██║     ██╔══██╗██╔════╝██╔══██╗██╔════╝
+██████╔╝███████║█████╗  ██║     ██████╔╝█████╗  ███████║███████╗
+██╔══██╗██╔══██║██╔══╝  ██║     ██╔═══╝ ██╔══╝  ██╔══██║╚════██║
+██║  ██║██║  ██║███████╗███████╗██║     ███████╗██║  ██║███████║
+╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝                                                            
+
+Privilege Escalation Enumeration Script for RHEL
 
 Created by: Robert Harp
 
@@ -25,8 +33,8 @@ Features
 Installation
 
 	1.	Clone the repository or download the script:
- 	git clone https://github.com/rharp86/rhelpeas.git
-  	cd rhelpeas
+ 	git clone https://github.com/rharp86/RhelPEAS-NG.git
+  	cd RhelPEAS-NG
    
 	2.	Make the script executable:
  	chmod +x rhelpeas.sh
