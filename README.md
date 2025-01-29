@@ -40,6 +40,10 @@ Basic Usage:
 
 ./rhelpeas.sh
 
+Can also run with sudo:
+
+sudo ./rhelpeas.sh 
+
 Default Output: 
 
 The Script defaults the output to txt by the coding in the script. If you enter the follow: ./rhelpeas.sh | tee rhelpeas_output.html (json or csv), the script will still generate a output text file. 
