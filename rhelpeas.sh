@@ -174,9 +174,13 @@ echo -e "==================================================================${res
 
 echo -e "\n${green}[+]Enumerating File Shares....${reset}"
 echo -e "\n${green}[+]NFS Shares:....${reset}"
-check_command showmount && showmount -e 127.0.0.1 2>/dev/null || echo -e "\n${red}[-] NFS not installed or no share available.${reset}"
+
+# Get the primary IP address of the target machine
+TARGET_IP=$(hostname -I | awk '{print $1}')
+
+check_command showmount && showmount -e "$TARGET_IP" 2>/dev/null || echo -e "\n${red}[-] NFS not installed or no share available.${reset}"
 echo -e "\n${green}[+]SMB Shares:....${reset}"
-check_command smbclient && smbclient -L localhost -N 2>/dev/null || echo -e "\n${red}[-] SMB not installed or no share available.${reset}"
+check_command smbclient && smbclient -L "$TARGET_IP" -N 2>/dev/null || echo -e "\n${red}[-] SMB not installed or no share available.${reset}"
 
 echo -e "\n${cyan}=================================================================="
 echo -e "Active Sessions and Logged-In Users"
