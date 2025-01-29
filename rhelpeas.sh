@@ -175,8 +175,16 @@ echo -e "==================================================================${res
 echo -e "\n${green}[+]Enumerating File Shares....${reset}"
 echo -e "\n${green}[+]NFS Shares:....${reset}"
 
-# Get the primary IP address of the target machine
-TARGET_IP=$(hostname -I | awk '{print $1}')
+# Check if a target IP address is provided as an argument
+if [ -z "$1" ]; then
+    # If no argument is provided, use the local machine's primary IP address
+    TARGET_IP=$(hostname -I | awk '{print $1}')
+else
+    # Use the provided argument as the target IP address
+    TARGET_IP="$1"
+fi
+
+echo -e "\n${green}[+] Target IP Address: $TARGET_IP${reset}"
 
 check_command showmount && showmount -e "$TARGET_IP" 2>/dev/null || echo -e "\n${red}[-] NFS not installed or no share available.${reset}"
 echo -e "\n${green}[+]SMB Shares:....${reset}"
