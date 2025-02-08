@@ -44,14 +44,14 @@ echo -e "\n${red}Justin is PAB!!!${reset}"
 CAT="
 ${blue}       /\\_/\\  
       ( o.o )  
-      > ^_^ < ${reset}
+      > ^_^ < ${red}●${reset}
 "
 
 # ASCII art for the red pea
-PEA="${red}●${reset}"
+#PEA="${red}●${reset}"
 
 # Display the cat and pea
-echo -e "$CAT\t$PEA"
+echo -e "$CAT"
 
 #Function to check command existence
 check_command() {
