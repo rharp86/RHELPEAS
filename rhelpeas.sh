@@ -2,7 +2,9 @@
 #Simple Privilege Escalation Enumeration Script for RHEL-based Systems
 
 # Define the log file
-LOG_FILE="rhelpeas_$(date +'%Y%m%d_%H%M%S').txt"
+HOST=$(hostname)
+LOG_FILE="rhelpeas_${HOST}_$(date +'%Y%m%d_%H%M%S').txt"
+
 
 # Redirect all output to both the console and the log file
 exec > >(tee -i "$LOG_FILE") 2>&1
